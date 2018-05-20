@@ -154,6 +154,8 @@ exports.check = (req, res, next) => {
     });
 };
 
+
+
 // GET /quizzes/randomplay
 exports.randomplay = (req, res, next) => {
 
@@ -163,46 +165,48 @@ exports.randomplay = (req, res, next) => {
     const whereOpt={'id':{[Sequelize.Op.notIn]: req.session.randomPlay}};//Operador utilizado para que me devuelva de models.quiz sólo aquellos que no estén ya en randomPlay
 
     models.quiz.count({where:whereOpt})
-        .then(count =>{
-            if(count===0){                              //Si la cuenta es 0, significa que no hay preguntas resueltas
-                const score=req.session.randomPlay.length;
-                req.session.randomPlay=undefined;
-                req.session.currentquiz=undefined;
-                res.render('quizzes/random_nomore',{
-                    score:score
+        .then(count => {
+
+
+            if (count === 0) {                              //Si la cuenta es 0, significa que no hay preguntas resueltas
+                const score = req.session.randomPlay.length;
+                req.session.randomPlay = undefined;
+                req.session.currentquiz = undefined;
+                res.render('quizzes/random_nomore', {
+                    score: score
                 });
             }
-            else{
+            else {
 
                 return models.quiz.findAll({
-                    where:whereOpt,
-                    offset:Math.floor(Math.random()*count),
-                    limit:1
+                    where: whereOpt,
+                    offset: Math.floor(Math.random() * count),
+                    limit: 1
 
-                }).then( quizzes =>{
+                }).then(quizzes => {
 
-                    //!*debugging console.log(quizzes[0].question);
-                    //console.log(quizzes[0].answer);
+//!*debugging console.log(quizzes[0].question);
+//console.log(quizzes[0].answer);
 
                     return quizzes[0];
 
-                });
+                }).then(quiz => {
+                    req.session.currentquiz = quiz;
+                    res.render('quizzes/random_play', {
+                        quiz: quiz,
+                        score: req.session.randomPlay.length
+                    })
+                }).catch(error => next(error));
             }
-        })
-        .then(quiz =>{
-            req.session.currentquiz=quiz;
-            res.render('quizzes/random_play',{
-                quiz:quiz,
-                score: req.session.randomPlay.length
-            })
         })
         .catch(error=> next(error));
 
 
-
 };
 
-/*RandomCheck*/
+
+
+/*RandomCheck */
 
 exports.randomcheck = (req, res, next) => {
 
@@ -233,6 +237,9 @@ exports.randomcheck = (req, res, next) => {
 
 
 };
+
+
+
 
 
 
