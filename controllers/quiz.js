@@ -170,8 +170,7 @@ exports.randomplay = (req, res, next) => {
 
             if (count === 0) {                              //Si la cuenta es 0, significa que no hay preguntas resueltas
                 const score = req.session.randomPlay.length;
-                req.session.randomPlay = undefined;
-                req.session.currentquiz = undefined;
+                req.session.randomPlay = [];
                 res.render('quizzes/random_nomore', {
                     score: score
                 });
@@ -191,7 +190,6 @@ exports.randomplay = (req, res, next) => {
                     return quizzes[0];
 
                 }).then(quiz => {
-                    req.session.currentquiz = quiz;
                     res.render('quizzes/random_play', {
                         quiz: quiz,
                         score: req.session.randomPlay.length
@@ -210,28 +208,23 @@ exports.randomplay = (req, res, next) => {
 
 exports.randomcheck = (req, res, next) => {
 
-    let score;
-    if(req.session.randomPlay===undefined){
-        score=0;
-    }else{
-        score=req.session.randomPlay.length;
-    }
+    const {quiz, query} = req;
 
+    let score =req.session.randomPlay.length;
 
-    const answer= req.query.answer.toLowerCase().trim();
-    const result = (answer=== req.session.currentquiz.answer.toLowerCase().trim());
+    const answer= query.answer.toLowerCase().trim();
+    const result = (answer=== quiz.answer.toLowerCase().trim());
    //!*debug console.log(`Respuesta ${answer}`);
    // console.log(`real ans ${req.session.currentquiz.answer}`);
 
    if(result){
-       if(! req.session.randomPlay.includes(req.session.currentquiz.id)){
-         req.session.randomPlay.push(req.session.currentquiz.id);
+       if(! req.session.randomPlay.includes(quiz.id)){
+         req.session.randomPlay.push(quiz.id);
            score=req.session.randomPlay.length;
 
        }
    }else{
-       req.session.randomPlay=undefined;
-       req.session.currentquiz=undefined;
+       req.session.randomPlay=[];
 
    }
    res.render('quizzes/random_result',{
@@ -246,6 +239,26 @@ exports.randomcheck = (req, res, next) => {
 };
 
 
+
+exports.randomcheck = (req, res, next) => {
+
+    const {quiz, query} = req;
+
+    const answer = query.answer || "";
+    const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
+    let lastScore = req.session.randomPlay.length;
+
+    result ? req.session.randomPlay.push(quiz.id) : req.session.randomPlay = [];
+
+    res.render('quizzes/random_result', {
+        answer,
+        quiz,
+        result,
+        score: result ? ++lastScore : lastScore
+    });
+
+
+};
 
 
 
