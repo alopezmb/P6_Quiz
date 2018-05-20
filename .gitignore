@@ -1,4 +1,6 @@
 node_modules
 .DS_Store
-quizzes.sqlite
+*.sqlite
 .env
+.idea
+package-lock.json
