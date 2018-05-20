@@ -210,7 +210,14 @@ exports.randomplay = (req, res, next) => {
 
 exports.randomcheck = (req, res, next) => {
 
-    let score=req.session.randomPlay.length;
+    let score;
+    if(req.session.randomPlay===undefined){
+        score=0;
+    }else{
+        score=req.session.randomPlay.length;
+    }
+
+
     const answer= req.query.answer.toLowerCase().trim();
     const result = (answer=== req.session.currentquiz.answer.toLowerCase().trim());
    //!*debug console.log(`Respuesta ${answer}`);
