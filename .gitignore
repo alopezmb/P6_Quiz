@@ -1,4 +1,4 @@
 node_modules
 .DS_Store
-quiz.sqlite
+quizzes.sqlite
 .env

@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bcd85863-60f5-41f2-915a-cd792ab74fa3" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/node_modules/" />
@@ -19,11 +18,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="165">
               <caret line="11" column="64" lean-forward="true" selection-start-line="11" selection-start-column="64" selection-end-line="11" selection-end-column="64" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="14" lean-forward="true" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -44,6 +52,7 @@
         <option value="$PROJECT_DIR$/views/author.ejs" />
         <option value="$PROJECT_DIR$/controllers/quiz.js" />
         <option value="$PROJECT_DIR$/models/index.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -84,43 +93,6 @@
             <path>
               <item name="quiz_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="quiz_2018" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="quiz_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quiz_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="quiz_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quiz_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="quiz_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quiz_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="quiz_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quiz_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="quiz_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quiz_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="quiz_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quiz_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="quiz_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quiz_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="quizzes" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -163,12 +135,12 @@
       <updated>1526812285940</updated>
       <workItem from="1526812287439" duration="5963000" />
       <workItem from="1526822339602" duration="7000" />
-      <workItem from="1526823666734" duration="280000" />
+      <workItem from="1526823666734" duration="469000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6250000" />
+    <option name="totallyTimeSpent" value="6439000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1297" height="675" extended-state="6" />
@@ -229,13 +201,6 @@
     <entry file="file://$PROJECT_DIR$/public/images/logos/cloudinary.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/images/author_face.jpeg">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -282,6 +247,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="64" lean-forward="true" selection-start-line="11" selection-start-column="64" selection-end-line="11" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="true" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
         </state>
       </provider>
     </entry>
