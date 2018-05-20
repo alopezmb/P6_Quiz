@@ -240,25 +240,6 @@ exports.randomcheck = (req, res, next) => {
 
 
 
-exports.randomcheck = (req, res, next) => {
-
-    const {quiz, query} = req;
-
-    const answer = query.answer || "";
-    const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
-    let lastScore = req.session.randomPlay.length;
-
-    result ? req.session.randomPlay.push(quiz.id) : req.session.randomPlay = [];
-
-    res.render('quizzes/random_result', {
-        answer,
-        quiz,
-        result,
-        score: result ? ++lastScore : lastScore
-    });
-
-
-};
 
 
 
