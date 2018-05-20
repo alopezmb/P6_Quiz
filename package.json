@@ -5,11 +5,11 @@
   "scripts": {
     "start": "heroku local:start",
     "super": "supervisor ./bin/www",
-    "start_old": "node ./bin/www"
+    "start_old": "node $NODE_DEBUG_OPTION ./bin/www"
   },
   "engines": {
     "node": "8.9.1",
-    "npm": "5.6.0"
+    "npm": "5.5.1"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
