@@ -10,7 +10,9 @@
         <% if (accepted || isAdmin || isQuizAuthor) { %>
 
             <li>
-                <%= tip.text %>
+                <!--tip.author carga el objeto user que haya sido el autor de esa pista, luego tengo todas las propiedades de
+                ese usuario: tip.author.id, ...password... salt.. etc -->
+                <%= tip.text %> <small class="magenta"> (by <%= tip.author ? tip.author.username : "Anonymous" %>) </small>
 
                 <% if (!accepted && (isAdmin || isQuizAuthor)) { %>
 
