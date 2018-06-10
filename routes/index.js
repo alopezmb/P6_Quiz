@@ -123,14 +123,20 @@ router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 
 
 //randomplay and randomcheck practica6
-router.get('/quizzes/randomplay',  quizController.randomplay);
-router.get('/quizzes/randomcheck/:quizId(\\d+)',  quizController.randomcheck);
+router.get('/quizzes/randomplay',quizController.create_countdown,tipController.tip_preparation, quizController.randomplay);
+router.get('/quizzes/randomcheck/:quizId(\\d+)',quizController.create_countdown,  quizController.randomcheck);
 
 //render edit view and add tip changes to database practica8
 router.get('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/edit',sessionController.loginRequired,
     tipController.adminOrAuthorRequired,tipController.edit);
 router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',sessionController.loginRequired,
 	tipController.adminOrAuthorRequired,tipController.update);
+
+//added functionalities
+
+router.get('/quizzes/randomplay/countdown', quizController.countdown); //ajax controller for countdown
+router.get('/quizzes/randomplay/timeup', quizController.timeup); //time up page renderer mw
+router.get('/quizzes/randomplay/randomtip', tipController.randomtip);
 
 
 

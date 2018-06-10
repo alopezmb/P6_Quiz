@@ -126,3 +126,70 @@ exports.destroy = (req, res, next) => {
     .catch(error => next(error));
 };
 
+
+exports.tip_preparation =(req,res,next)=>{
+    let maxCredits=2;
+    req.session.maxCredits=maxCredits;
+    next();
+
+};
+
+// GET /quizzes/randomplay/randomtip
+
+exports.randomtip = (req, res, next) => {
+
+   let maxCredits=req.session.maxCredits;
+
+   if (typeof req.session.tipsforquiz.creditsleft ==='undefined'){
+        req.session.tipsforquiz.creditsleft=maxCredits;
+    }
+
+
+
+
+
+    let allTips=req.session.tipsforquiz.tips||[];
+    let usedTips=req.session.usedTips||[];
+    let count=req.session.tipsforquiz.tips.length;
+    let index= Math.floor(Math.random() * count);
+
+
+
+    if(usedTips.length===allTips.length){
+        res.json({"nomore":true});
+    }
+    else {
+        while (usedTips.includes(index)) {
+            index = Math.floor(Math.random() * count);
+
+        }
+
+        let randomTip = allTips[index];
+        usedTips.push(index);
+        req.session.usedTips = usedTips;
+
+        if (req.session.tipsforquiz.creditsleft > 0) {
+            req.session.tipsforquiz.creditsleft--;
+
+            res.json({
+                "randomtip": randomTip.text,
+                "creditsleft": req.session.tipsforquiz.creditsleft
+            });
+
+        }else{
+            req.session.tipsforquiz.creditsleft = 0;
+            res.json({
+                "outofcredits": true
+            });
+
+        }
+
+    }
+
+
+
+
+
+};
+
+

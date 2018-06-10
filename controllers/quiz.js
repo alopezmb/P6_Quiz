@@ -231,7 +231,6 @@ exports.check = (req, res, next) => {
 // GET /quizzes/randomplay
 exports.randomplay = (req, res, next) => {
 
-
     req.session.randomPlay= req.session.randomPlay || []; //Inicialmente, si no existe el array, lo creo
 
     const whereOpt={'id':{[Sequelize.Op.notIn]: req.session.randomPlay}};//Operador utilizado para que me devuelva de models.quiz sólo aquellos que no estén ya en randomPlay
@@ -243,6 +242,8 @@ exports.randomplay = (req, res, next) => {
             if (count === 0) {                              //Si la cuenta es 0, significa que no hay preguntas resueltas
                 const score = req.session.randomPlay.length;
                 req.session.randomPlay = [];
+                req.session.tipsforquiz={};
+                req.session.maxCredits=undefined;
                 res.render('quizzes/random_nomore', {
                     score: score
                 });
@@ -252,19 +253,31 @@ exports.randomplay = (req, res, next) => {
                 return models.quiz.findAll({
                     where: whereOpt,
                     offset: Math.floor(Math.random() * count),
+                    include: [ {model: models.tip}], //añadido como mejora: tips (sin nombre de autor) en randomplay
                     limit: 1
 
                 }).then(quizzes => {
 
 //!*debugging console.log(quizzes[0].question);
 //console.log(quizzes[0].answer);
-
+                    if(typeof req.session.tipsforquiz ==='undefined'){req.session.tipsforquiz={};}
+                    req.session.tipsforquiz.tips=quizzes[0].tips;
                     return quizzes[0];
 
+
+
                 }).then(quiz => {
+
+
+                    if(typeof req.session.tipsforquiz.creditsleft==='undefined'){
+                        req.session.tipsforquiz.creditsleft=req.session.maxCredits;
+                    }
+
                     res.render('quizzes/random_play', {
                         quiz: quiz,
-                        score: req.session.randomPlay.length
+                        score: req.session.randomPlay.length,
+                        randomplay:true,
+                        credits:req.session.tipsforquiz.creditsleft
                     })
                 }).catch(error => next(error));
             }
@@ -280,12 +293,19 @@ exports.randomplay = (req, res, next) => {
 
 exports.randomcheck = (req, res, next) => {
 
-    const {quiz, query} = req;
+    if((typeof req.session.usedTips!=='undefined')&&(typeof req.session.tipsforquiz!=='undefined')) {
+        req.session.usedTips = [];
+        req.session.tipsforquiz.tips = [];
+    }
 
+
+    const {quiz, query} = req;
     let score =req.session.randomPlay.length;
+
 
     const answer= query.answer.toLowerCase().trim();
     const result = (answer=== quiz.answer.toLowerCase().trim());
+
    //!*debug console.log(`Respuesta ${answer}`);
    // console.log(`real ans ${req.session.currentquiz.answer}`);
 
@@ -296,6 +316,9 @@ exports.randomcheck = (req, res, next) => {
 
        }
    }else{
+       req.session.tipsforquiz={};
+       req.session.usedTips=[];
+       req.session.maxCredits=undefined;
        req.session.randomPlay=[];
 
    }
@@ -309,6 +332,61 @@ exports.randomcheck = (req, res, next) => {
 
 
 };
+
+exports.create_countdown=(req,res,next)=> {
+    let allowedTime = 10;
+        let countprops = {
+            "count": allowedTime,
+            "allowedTime": allowedTime
+        };
+    req.session.countprops = countprops;
+    res.locals.allowedTime=req.session.countprops.allowedTime;
+    next();
+}
+
+//GET /quizzes/randomplay/countdown             partial dynamic view
+exports.countdown=(req,res,next)=> {
+
+    if(req.session.countprops.count!==0){
+        req.session.countprops.count--;
+    }
+    else if(req.session.countprops.count===0){
+        req.session.countprops.count=allowedTime;
+    }
+
+
+    res.json({ "count":req.session.countprops.count,
+        "blockrefresh":req.session.countprops.blockrefresh,
+        "isNewQuiz":req.session.countprops.isNewQuiz}); // ?? lo piuedo quitar ?
+
+
+
+
+
+    /*
+    let allowedTime=10;
+    count=req.session.count||allowedTime;
+    (typeof req.session.count === 'undefined') ? (req.session.count=count) : (req.session.count--);
+
+    res.json({"count": req.session.count});
+
+    if(req.session.count===0){
+        req.session.count=allowedTime; */
+
+};
+
+exports.timeup=(req,res,next)=> {
+
+    let score =req.session.randomPlay.length||0;
+    req.session.randomPlay=[];
+    req.session.tipsforquiz={};
+    req.session.usedTips=[];
+    req.session.maxCredits=undefined;
+    res.render('quizzes/timeup',{score:score});
+
+};
+
+
 
 
 

@@ -1,4 +1,15 @@
 
+<%if (result) { %>
+<script>
+    var audio = new Audio('/sounds/correct.mp3');
+    audio.play();
+</script>
+<%} else if(!result) {%>
+<script>
+    var audio = new Audio('/sounds/gameover.mp3');
+    audio.play();
+</script>
+<% }%>
 <h1>
     Random Play:
 </h1>
