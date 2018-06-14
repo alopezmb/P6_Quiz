@@ -13,6 +13,7 @@
           type='text/css'
           media='only screen and (max-width: 480px)'
           href='/stylesheets/smartphone.css'/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 <body>
@@ -41,8 +42,10 @@
         <a href="/author">Author</a>
         <% if (session.user) { %>
             <a href="/users">Users</a>
+            <a href="/users?scoreboard=true">Scoreboard</a>
         <% } %>
         <a href="/quizzes/randomplay">Play</a>
+       <!-- <a href="/quizzes/anonimos">Anon</a> -->
     </nav>
 
     <section class="main" id="mainSection">

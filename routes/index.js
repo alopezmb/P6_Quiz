@@ -11,6 +11,8 @@ const sessionController = require('../controllers/session');
 // autologout
 router.all('*',sessionController.deleteExpiredUserSession);
 
+
+
 //-----------------------------------------------------------
 
 // History: Restoration routes.
@@ -121,27 +123,6 @@ router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 
 
-
-//randomplay and randomcheck practica6
-router.get('/quizzes/randomplay',quizController.create_countdown,tipController.tip_preparation, quizController.randomplay);
-router.get('/quizzes/randomcheck/:quizId(\\d+)',quizController.create_countdown,  quizController.randomcheck);
-
-//render edit view and add tip changes to database practica8
-router.get('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/edit',sessionController.loginRequired,
-    tipController.adminOrAuthorRequired,tipController.edit);
-router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',sessionController.loginRequired,
-	tipController.adminOrAuthorRequired,tipController.update);
-
-//added functionalities
-
-router.get('/quizzes/randomplay/countdown', quizController.countdown); //ajax controller for countdown
-router.get('/quizzes/randomplay/timeup', quizController.timeup); //time up page renderer mw
-router.get('/quizzes/randomplay/randomtip', tipController.randomtip);
-
-
-
-
-
 router.post('/quizzes/:quizId(\\d+)/tips',
     sessionController.loginRequired,
     tipController.create);
@@ -153,6 +134,26 @@ router.delete('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
     sessionController.loginRequired,
     quizController.adminOrAuthorRequired,
     tipController.destroy);
+
+/* PRACTICAL COURSEWORK REQUIREMENTS  AND ADDED FUNCTIONALITIES */
+
+//randomplay and randomcheck practica6
+router.get('/quizzes/randomplay',quizController.create_countdown,tipController.tip_preparation, quizController.randomplay);
+router.get('/quizzes/randomcheck/:quizId(\\d+)',quizController.create_countdown,  quizController.randomcheck);
+
+//render edit view and add tip changes to database practica8
+router.get('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/edit',sessionController.loginRequired,
+    tipController.adminOrAuthorRequired,tipController.edit);
+router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',sessionController.loginRequired,
+    tipController.adminOrAuthorRequired,tipController.update);
+
+
+//added functionalities
+router.get('/quizzes/randomplay/countdown', quizController.countdown); //ajax controller for countdown
+router.get('/quizzes/randomplay/timeup', quizController.timeup); //time up page renderer mw
+router.get('/quizzes/randomplay/randomtip', tipController.randomtip);
+router.put('/quizzes/randomplay/scoreupdate/:userId',userController.update_bestscore);
+router.get('/quizzes/anonimos',quizController.anonimos);
 
 
 module.exports = router;

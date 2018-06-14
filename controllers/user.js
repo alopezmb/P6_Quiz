@@ -19,7 +19,6 @@ exports.load = (req, res, next, userId) => {
     .catch(error => next(error));
 };
 
-
 // GET /users
 exports.index = (req, res, next) => {
 
@@ -37,16 +36,36 @@ exports.index = (req, res, next) => {
         // This String is added to a local variable of res, which is used into the application layout file.
         res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
 
-        const findOptions = {
-            offset: items_per_page * (pageno - 1),
-            limit: items_per_page,
-            order: ['username']
-        };
+        let findOptions={};
+        if(req.query.scoreboard !=='undefined' && req.query.scoreboard) {
+             findOptions = {
+                offset: items_per_page * (pageno - 1),
+                limit: items_per_page,
+                 order: [['bestScore','DESC']]
+            };
+
+
+        }else{
+                findOptions = {
+                offset: items_per_page * (pageno - 1),
+                limit: items_per_page,
+                order: ['username']
+            };
+        }
 
         return models.user.findAll(findOptions);
     })
     .then(users => {
+
+        if(req.query.scoreboard !=='undefined' && req.query.scoreboard) {
+            let isScoreboard=true;
+
+            res.render('users/scoreboard', {users});
+        }
+
+        else{
         res.render('users/index', {users});
+        }
     })
     .catch(error => next(error));
 };
@@ -139,6 +158,28 @@ exports.update = (req, res, next) => {
         res.render('users/edit', {user});
     })
     .catch(error => next(error));
+};
+
+
+// PUT /quizzes/randomplay/bestscore/:userId
+exports.update_bestscore = (req, res, next) => {
+
+    const {user, query} = req;
+
+    let score = query.score;
+
+    if (user.bestScore >= score) {
+        res.redirect('/quizzes');
+
+    } else {
+        user.bestScore = score;
+        user.save({fields: ["bestScore"]})
+            .then(() => {
+                req.flash('success', 'New Best Score! Check the Scoreboard!');
+                res.redirect('/');
+            })
+            .catch(error => next(error));
+    }
 };
 
 

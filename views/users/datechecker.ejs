@@ -1,0 +1,35 @@
+<% var datetime = new Date(users[i].lastSeen).getTime(); %>
+<% var now = new Date().getTime(); %>
+<% if (datetime < now) {
+    var milisec_diff = now - datetime;
+} else {
+    var milisec_diff = datetime - now;
+}
+var mins = Math.round(milisec_diff / (60 * 1000));
+
+if(mins <= (session.maxIdleTime / (60 * 1000))) { %>
+
+<td>Active Now &nbsp <i class="fas fa-circle active"></i></td>
+<% }%>
+
+<% if((mins > (session.maxIdleTime / (60 * 1000))) && (mins<60) ) {
+    var timeAgo = mins.toString() + " min. ago"; %>
+
+ <td><%= timeAgo %> &nbsp <i class="fas fa-circle offline"></i></td>
+<%}%>
+
+   <% if (mins >= (60) && mins <= (60 * 24)) {
+    var hours = Math.floor(mins / 60);
+    var mins = mins % 60;
+    var timeAgo= hours.toString()+" h. " +mins.toString()+" min. ago"; %>
+
+ <td><%= timeAgo %> &nbsp <i class="fas fa-circle offline"></i></td>
+<%}%>
+<%
+if (mins >= (60) && mins >= (60 * 24)) {
+    var options = { year: 'numeric', month: 'long', day: 'numeric', hour:'2-digit', minute:'2-digit' };
+    var timeAgo= new Date(users[i].lastSeen).toLocaleDateString('en-UK', options); %>
+
+<td><%= timeAgo %> &nbsp <i class="fas fa-circle offline"></i></td>
+<% } %>
+

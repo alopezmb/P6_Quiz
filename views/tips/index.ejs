@@ -1,10 +1,17 @@
 
-<% if(typeof randomplay !== 'undefined'){ %>
-<button id="addTip" hidden>Show Tip </button>
-<span id="creditsInfo"hidden><small>Credits left:<span id="credits"> <%= credits %> </span></small></span>
-<%}%>
+<% if(typeof randomplay !== 'undefined' && randomplay){ %>
+
+<button id="addTip">Show Tip </button>
+<span id="creditsInfo"><small>Credits left:<span id="credits"> <%= credits %> </span></small></span>
+<script src="/js/randomtips.js"></script>
+
+
+
+
 <ul class="tipList">
-    <%if(typeof randomplay === 'undefined' || !randomplay){ %>
+
+ <% } else{ %>
+
     <% for (var i in tips) { %>
         <% var tip = tips[i]; %>
 
@@ -19,8 +26,7 @@
             <li>
                 <!--tip.author carga el objeto user que haya sido el autor de esa pista, luego tengo todas las propiedades de
                 ese usuario: tip.author.id, ...password... salt.. etc -->
-                <%= tip.text %> <small class="magenta">
-                    <%if(typeof randomplay === 'undefined' || !randomplay){ %> (by <%= tip.author ? tip.author.username : "Anonymous" %> ) <%}%> </small>
+                <%= tip.text %> <small class="magenta"> (by <%= tip.author ? tip.author.username : "Anonymous" %> )</small>
 
                 <% if (!accepted && (isAdmin || isQuizAuthor)) { %>
 
@@ -42,46 +48,19 @@
 
                 <% if (isAdmin || isQuizAuthor ||isTipAuthor) { %>
 
-                    <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
-                        <button>Delete</button>
-                    </a>
-
+                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
+                    <button>Delete</button>
+                </a>
 
                 <% } %>
 
+           <% } %>
 
             </li>
+
         <% } %>
+
     <% } %>
 
-    <%}else if(randomplay){%>
-    <script>
-        $('#addTip').removeAttr('hidden');
-        $('#creditsInfo').removeAttr('hidden');
-        $("#addTip").click(function(){
-            $.ajax({
-                type: 'GET',
-                url: '/quizzes/randomplay/randomtip',
-                success: function (data) {
-                   if(typeof data.outofcredits !== 'undefined' && data.outofcredits === true){
-                       $('#addTip').replaceWith("<p class='magenta'>Out of credits =(</p>");
-                   }
-                  else if (typeof data.nomore !== 'undefined' && data.nomore === true) {
-                        $('#addTip').replaceWith("<p class='magenta'>No more tips to show</p>");
-                    }
-                     else if(data.creditsleft !=='undefined' && data.creditsleft>=0) {
 
-                        $('#credits').html(data.creditsleft);
-                        $(".tipList").append('<li>' + data.randomtip + '</li>');
-                    }
-
-
-
-
-                }
-            });
-        });
-    </script>
-
-    <%}%>
 </ul>

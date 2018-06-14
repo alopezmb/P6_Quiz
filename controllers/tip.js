@@ -127,6 +127,7 @@ exports.destroy = (req, res, next) => {
 };
 
 
+//loads max number of credits allowed so that it doesnt have to be declared multiple times
 exports.tip_preparation =(req,res,next)=>{
     let maxCredits=2;
     req.session.maxCredits=maxCredits;
@@ -143,9 +144,6 @@ exports.randomtip = (req, res, next) => {
    if (typeof req.session.tipsforquiz.creditsleft ==='undefined'){
         req.session.tipsforquiz.creditsleft=maxCredits;
     }
-
-
-
 
 
     let allTips=req.session.tipsforquiz.tips||[];

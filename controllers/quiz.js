@@ -241,9 +241,9 @@ exports.randomplay = (req, res, next) => {
 
             if (count === 0) {                              //Si la cuenta es 0, significa que no hay preguntas resueltas
                 const score = req.session.randomPlay.length;
-                req.session.randomPlay = [];
-                req.session.tipsforquiz={};
-                req.session.maxCredits=undefined;
+               delete req.session.randomPlay;
+               delete req.session.tipsforquiz;
+               delete req.session.maxCredits;
                 res.render('quizzes/random_nomore', {
                     score: score
                 });
@@ -258,9 +258,9 @@ exports.randomplay = (req, res, next) => {
 
                 }).then(quizzes => {
 
-//!*debugging console.log(quizzes[0].question);
-//console.log(quizzes[0].answer);
-                    if(typeof req.session.tipsforquiz ==='undefined'){req.session.tipsforquiz={};}
+                    if(typeof req.session.tipsforquiz ==='undefined'){
+                        req.session.tipsforquiz={};
+                    }
                     req.session.tipsforquiz.tips=quizzes[0].tips;
                     return quizzes[0];
 
@@ -294,8 +294,8 @@ exports.randomplay = (req, res, next) => {
 exports.randomcheck = (req, res, next) => {
 
     if((typeof req.session.usedTips!=='undefined')&&(typeof req.session.tipsforquiz!=='undefined')) {
-        req.session.usedTips = [];
-        req.session.tipsforquiz.tips = [];
+        delete req.session.usedTips;
+        delete req.session.tipsforquiz.tips;
     }
 
 
@@ -306,8 +306,6 @@ exports.randomcheck = (req, res, next) => {
     const answer= query.answer.toLowerCase().trim();
     const result = (answer=== quiz.answer.toLowerCase().trim());
 
-   //!*debug console.log(`Respuesta ${answer}`);
-   // console.log(`real ans ${req.session.currentquiz.answer}`);
 
    if(result){
        if(! req.session.randomPlay.includes(quiz.id)){
@@ -316,23 +314,20 @@ exports.randomcheck = (req, res, next) => {
 
        }
    }else{
-       req.session.tipsforquiz={};
-       req.session.usedTips=[];
-       req.session.maxCredits=undefined;
-       req.session.randomPlay=[];
-
+      delete req.session.tipsforquiz;
+      delete req.session.usedTips;
+      delete req.session.maxCredits;
+      delete req.session.randomPlay;
    }
+
    res.render('quizzes/random_result',{
        result:result,
        answer:answer,
        score:score
-   })
-
-
-
+   });
 
 };
-
+//first mw called on randomplay and randomcheck routes, to set up countdown
 exports.create_countdown=(req,res,next)=> {
     let allowedTime = 10;
         let countprops = {
@@ -342,7 +337,7 @@ exports.create_countdown=(req,res,next)=> {
     req.session.countprops = countprops;
     res.locals.allowedTime=req.session.countprops.allowedTime;
     next();
-}
+};
 
 //GET /quizzes/randomplay/countdown             partial dynamic view
 exports.countdown=(req,res,next)=> {
@@ -353,28 +348,12 @@ exports.countdown=(req,res,next)=> {
     else if(req.session.countprops.count===0){
         req.session.countprops.count=allowedTime;
     }
+    res.json({ "count":req.session.countprops.count});
 
-
-    res.json({ "count":req.session.countprops.count,
-        "blockrefresh":req.session.countprops.blockrefresh,
-        "isNewQuiz":req.session.countprops.isNewQuiz}); // ?? lo piuedo quitar ?
-
-
-
-
-
-    /*
-    let allowedTime=10;
-    count=req.session.count||allowedTime;
-    (typeof req.session.count === 'undefined') ? (req.session.count=count) : (req.session.count--);
-
-    res.json({"count": req.session.count});
-
-    if(req.session.count===0){
-        req.session.count=allowedTime; */
 
 };
 
+//GET /quizzes/randomplay/timeup
 exports.timeup=(req,res,next)=> {
 
     let score =req.session.randomPlay.length||0;
@@ -384,6 +363,25 @@ exports.timeup=(req,res,next)=> {
     req.session.maxCredits=undefined;
     res.render('quizzes/timeup',{score:score});
 
+};
+
+
+exports.anonimos=(req,res,next)=>{
+
+    console.log("Tengo que ver esto");
+
+    models.quiz.findAll({
+        where:{
+            authorId:0
+        }
+    }).then(quizzes=> {
+           for(var i in quizzes){
+               console.log(`Pregunta de quiz: ${quizzes[i].question} Id autor: ${quizzes[i].authorId}`);
+           }
+           console.log("hola?");
+           res.render('quizzes/anonimos',{quizzes});
+        })
+        .catch(error=> next(error));
 };
 
 

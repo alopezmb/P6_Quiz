@@ -1,10 +1,10 @@
 
-<%if (result) { %>
+<% if (result) { %>
 <script>
     var audio = new Audio('/sounds/correct.mp3');
     audio.play();
 </script>
-<%} else if(!result) {%>
+<% } else if(!result) {%>
 <script>
     var audio = new Audio('/sounds/gameover.mp3');
     audio.play();
@@ -25,7 +25,15 @@
 <p>
     <% if (!result) { %>
     You have failed.
+    <% if (typeof session.user !=='undefined') { %>
+
+    <a href="/quizzes/randomplay/scoreupdate/<%= session.user.id %>?score=<%= score %>&_method=PUT"> End of Play </a>
+      <% }else{ %>
+
     <a href="/quizzes"> End of Play </a>
+    <% } %>
+
+
     <% } else { %>
     You have succeeded.
     <a href="/quizzes/randomplay"><button>Continue playing</button></a>

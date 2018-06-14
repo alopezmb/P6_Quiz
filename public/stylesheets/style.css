@@ -193,3 +193,14 @@ a {
 .magenta{
     color:magenta;
 }
+
+.active{
+    font-size:0.7em;
+    color:green;
+}
+
+.offline{
+    font-size:0.7em;
+    color:darkgrey;
+}
+
