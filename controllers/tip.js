@@ -129,7 +129,7 @@ exports.destroy = (req, res, next) => {
 
 //loads max number of credits allowed so that it doesnt have to be declared multiple times
 exports.tip_preparation =(req,res,next)=>{
-    let maxCredits=2;
+    let maxCredits=5;
     req.session.maxCredits=maxCredits;
     next();
 
@@ -170,7 +170,7 @@ exports.randomtip = (req, res, next) => {
             req.session.tipsforquiz.creditsleft--;
 
             res.json({
-                "randomtip": randomTip.text,
+                "randomtip": randomTip,
                 "creditsleft": req.session.tipsforquiz.creditsleft
             });
 

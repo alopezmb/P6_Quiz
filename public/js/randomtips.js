@@ -13,7 +13,8 @@ $(document).ready(function() {
                 else if (data.creditsleft !== 'undefined' && data.creditsleft >= 0) {
 
                     $('#credits').html(data.creditsleft);
-                    $(".tipList").append('<li>' + data.randomtip + '</li>');
+                    $(".tipList").append('<li>' + data.randomtip.text +
+                        '<small class="magenta"> &nbsp &nbsp(by '+data.randomtip.author.username+ ")"+'</small></li>');
                 }
 
 

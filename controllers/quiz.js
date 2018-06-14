@@ -17,9 +17,6 @@ const cloudinary_upload_options = {
 
 // Autoload the quiz with id equals to :quizId
 
-const paginate = require('../helpers/paginate').paginate;
-
-
 exports.load = (req, res, next, quizId) => {
 
     const options = {
@@ -475,6 +472,7 @@ exports.randomplay = (req, res, next) => {
                delete req.session.randomPlay;
                delete req.session.tipsforquiz;
                delete req.session.maxCredits;
+               delete req.session.blocker;
                 res.render('quizzes/random_nomore', {
                     score: score
                 });
@@ -484,7 +482,10 @@ exports.randomplay = (req, res, next) => {
                 return models.quiz.findAll({
                     where: whereOpt,
                     offset: Math.floor(Math.random() * count),
-                    include: [ {model: models.tip}], //añadido como mejora: tips (sin nombre de autor) en randomplay
+                    include: [ {model: models.tip, include:[ {model: models.user, as: 'author'}]},
+                        {model:models.attachment},
+                        {model: models.user, as: 'author'}
+                        ],
                     limit: 1
 
                 }).then(quizzes => {
@@ -506,6 +507,7 @@ exports.randomplay = (req, res, next) => {
 
                     res.render('quizzes/random_play', {
                         quiz: quiz,
+                        cloudinary,
                         score: req.session.randomPlay.length,
                         randomplay:true,
                         credits:req.session.tipsforquiz.creditsleft
@@ -549,8 +551,9 @@ exports.randomcheck = (req, res, next) => {
       delete req.session.usedTips;
       delete req.session.maxCredits;
       delete req.session.randomPlay;
-   }
 
+   }
+    delete req.session.blocker;
    res.render('quizzes/random_result',{
        result:result,
        answer:answer,
@@ -570,11 +573,24 @@ exports.create_countdown=(req,res,next)=> {
     next();
 };
 
+//avoid time cheating with this mw
+exports.blockRefreshing=(req,res,next)=> {
+    req.session.blocker=req.session.blocker||false;
+
+    if(!req.session.blocker){
+        next();
+    }else{
+        console.log("refresh blocked, prevent cheating");
+    }
+};
+
+
 //GET /quizzes/randomplay/countdown             partial dynamic view
 exports.countdown=(req,res,next)=> {
 
     if(req.session.countprops.count!==0){
         req.session.countprops.count--;
+        req.session.blocker=true;
     }
     else if(req.session.countprops.count===0){
         req.session.countprops.count=allowedTime;
@@ -592,6 +608,7 @@ exports.timeup=(req,res,next)=> {
     req.session.tipsforquiz={};
     req.session.usedTips=[];
     req.session.maxCredits=undefined;
+    delete req.session.blocker;
     res.render('quizzes/timeup',{score:score});
 
 };

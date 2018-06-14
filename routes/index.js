@@ -148,7 +148,7 @@ router.delete('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
 /* PRACTICAL COURSEWORK REQUIREMENTS  AND ADDED FUNCTIONALITIES */
 
 //randomplay and randomcheck practica6
-router.get('/quizzes/randomplay',quizController.create_countdown,tipController.tip_preparation, quizController.randomplay);
+router.get('/quizzes/randomplay',quizController.blockRefreshing,quizController.create_countdown,tipController.tip_preparation, quizController.randomplay);
 router.get('/quizzes/randomcheck/:quizId(\\d+)',quizController.create_countdown,  quizController.randomcheck);
 
 //render edit view and add tip changes to database practica8
