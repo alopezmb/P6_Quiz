@@ -1,10 +1,9 @@
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const {models} = require("../models");
-
 const paginate = require('../helpers/paginate').paginate;
 
-// Autoload the quiz with id equals to :quizId
+// Autoload the quiz with id equals to :quizId with eager loading
 exports.load = (req, res, next, quizId) => {
 
     models.quiz.findById(quizId, {
