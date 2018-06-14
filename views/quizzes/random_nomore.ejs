@@ -14,8 +14,17 @@
     You answered all questions. You are a champion.
 </p>
 
+<% if (typeof session.user !=='undefined') { %>
 <p>
     <a href="/quizzes/randomplay/scoreupdate/<%= session.user.id %>?score=<%= score %>&_method=PUT">
         <button>Back to Home Page</button></a>
 </p>
+
+
+<% } else { %>
+<p>
+    <a href="/"><button>Back to Home Page</button></a>
+</p>
+
+<% } %>
 
