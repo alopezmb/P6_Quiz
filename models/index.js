@@ -44,7 +44,7 @@ quiz.belongsTo(user, {as: 'author', foreignKey: 'authorId'});
 attachment.belongsTo(quiz);
 quiz.hasOne(attachment);
 
-// Relation 1-to-1 between Quiz and User:
+// Relation N-to-N between Quiz and User:
 //    A User has many favourite quizzes.
 //    A quiz has many fans (the users who have marked it as favorite)
 quiz.belongsToMany(user, {
@@ -60,5 +60,10 @@ user.belongsToMany(quiz, {
     foreignKey: 'userId',
     otherKey: 'quizId'
 });
+
+// Relation 1-to-N between User and Tip:
+user.hasMany(tip, {foreignKey: 'authorId'});
+tip.belongsTo(user, {as: 'author', foreignKey: 'authorId'});
+
 
 module.exports = sequelize;

@@ -1,22 +1,36 @@
+
 <h1>
     Users
 </h1>
 
 <table>
+    <thead>
+    <th scope="col">Status</th>
+    <th scope="col" colspan="3">Username</th>
+
+    </thead>
+    <tbody>
     <% for (var i in users) { %>
     <tr>
+        <% include ../users/datechecker %>
+
         <td>
             <a href="/users/<%= users[i].id %>" ><%= users[i].username %></a>
             <%= users[i].isAdmin ? "(admin)" : "" %>
         </td>
-
         <% if (session.user) { %>
 
-            <% if (session.user.isAdmin || session.user.id === users[i].id) { %>
-                <td>
-                    <a href="/users/<%= users[i].id %>/edit"><button>edit</button></a>
+             <%if (session.user.isAdmin && users[i].isAdmin){%>
+                <td colspan="2">
+                    <a href="/users/<%= users[i].id %>/edit"><button>edit admin</button></a>
                 </td>
             <%  } %>
+        <% if (!session.user.isAdmin &&session.user.id === users[i].id){%>
+        <td>
+            <a href="/users/<%= users[i].id %>/edit"><button>edit</button></a>
+        </td>
+        <%  } %>
+
 
             <% if (session.user.isAdmin && session.user.id !== users[i].id) { %>
                 <td>
@@ -27,12 +41,19 @@
                 </td>
             <%  } %>
 
-        <% } %>
+
+
+        <%}%>
 
     </tr>
+
     <%  } %>
+    </tbody>
+
 </table>
 
-<% if (session.user) { %>
+    <% if (session.user) { %>
     <a href="/users/new"><button type="button">Create new user</button></a>
-<%  } %>
+    <%  } %>
+
+

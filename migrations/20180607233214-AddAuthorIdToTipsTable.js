@@ -3,15 +3,13 @@
 module.exports = {
     up: function (queryInterface, Sequelize) {
         return queryInterface.addColumn(
-            'quizzes',
+            'tips',
             'authorId',
-            {   type: Sequelize.INTEGER,
-                defaultValue:0
-            }
+            {type: Sequelize.INTEGER}
         );
     },
 
     down: function (queryInterface, Sequelize) {
-        return queryInterface.removeColumn('quizzes', 'authorId');
+        return queryInterface.removeColumn('tips', 'authorId');
     }
 };

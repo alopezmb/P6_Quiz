@@ -1,16 +1,32 @@
 
-<ul>
+<% if(typeof randomplay !== 'undefined' && randomplay){ %>
+
+<button id="addTip">Show Tip </button>
+<span id="creditsInfo"><small>Credits left:<span id="credits"> <%= credits %> </span></small></span>
+<script src="/js/randomtips.js"></script>
+
+
+
+
+<ul class="tipList">
+
+ <% } else{ %>
+
     <% for (var i in tips) { %>
         <% var tip = tips[i]; %>
 
         <% var accepted = tip.accepted; %>
+        <%var tipAuthorId= tip.authorId%>
         <% var isAdmin = session.user && session.user.isAdmin; %>
         <% var isQuizAuthor = session.user && quizAuthorId && quizAuthorId === session.user.id; %>
+        <%var isTipAuthor=session.user && tipAuthorId && tipAuthorId==session.user.id%>
 
         <% if (accepted || isAdmin || isQuizAuthor) { %>
 
             <li>
-                <%= tip.text %>
+                <!--tip.author carga el objeto user que haya sido el autor de esa pista, luego tengo todas las propiedades de
+                ese usuario: tip.author.id, ...password... salt.. etc -->
+                <%= tip.text %> <small class="magenta"> (by <%= tip.author ? tip.author.username : "Anonymous" %> )</small>
 
                 <% if (!accepted && (isAdmin || isQuizAuthor)) { %>
 
@@ -18,16 +34,33 @@
                         <button>Accept</button>
                     </a>
 
-                <% } %>
-
-                <% if (isAdmin || isQuizAuthor) { %>
-
-                    <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
-                        <button>Delete</button>
-                    </a>
 
                 <% } %>
+
+                <% if (isAdmin || isQuizAuthor || isTipAuthor) { %>
+
+                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>/edit">
+                    <button>Edit</button>
+                </a>
+
+
+                <% } %>
+
+                <% if (isAdmin || isQuizAuthor ||isTipAuthor) { %>
+
+                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
+                    <button>Delete</button>
+                </a>
+
+                <% } %>
+
+           <% } %>
+
             </li>
+
         <% } %>
+
     <% } %>
+
+
 </ul>

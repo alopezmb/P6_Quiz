@@ -1,0 +1,18 @@
+
+<h1>
+    SCOREBOARD
+</h1>
+
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Best Score</th>
+
+    </tr>
+    <% for (var i in users) { %>
+    <tr>
+        <td><%= users[i].username %></td>
+        <td><%= users[i].bestScore %></td>
+    </tr>
+    <%  } %>
+</table>

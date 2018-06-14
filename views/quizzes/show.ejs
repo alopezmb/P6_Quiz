@@ -33,10 +33,13 @@
 <% if (session.user) { %>
     <% include ../tips/new %>
 <% } %>
-
+<!-- quiz.tips accede al objeto tips que se ha cargado con la relación.
+se llama tips porque no se ha puesto un nombre específico, con lo del as "nombre", así que se pone
+el nombre de la tabla de migraciones (TIPS, no tip) por defecto)-->
 <% var tips = quiz.tips; %>
 <% var quizId = quiz.id; %>
 <% var quizAuthorId = quiz.authorId; %>
+
 
 <% include ../tips/index %>
 

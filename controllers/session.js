@@ -16,19 +16,42 @@ const maxIdleTime = 5*60*1000;
 // Middleware used to destroy the user's session if the inactivity time
 // has been exceeded.
 //
+
+
+
 exports.deleteExpiredUserSession = (req, res, next) => {
 
-    if (req.session.user ) { // There exista user's session
-        if ( req.session.user.expires < Date.now() ) { // Expired
+
+    if (req.session.user) { // There exista user's session
+        if (req.session.user.expires < Date.now()) { // Expired
             delete req.session.user; // Logout
             req.flash('info', 'User session has expired.');
         } else { // Not expired. Reset value.
             req.session.user.expires = Date.now() + maxIdleTime;
+            let date= new Date().toString();
+            console.log("DATE IS: "+date);
+             models.user.findById(req.session.user.id)
+                .then(user => {
+                    user.lastSeen = date;
+                    user.save({fields: ["lastSeen"]})
+                        .catch(error => {
+                            next(error);
+                        });
+
+                }).catch(error => {
+                    next(error);
+
+                });
+
+
         }
+
     }
-    // Continue with the request
+
     next();
 };
+
+
 
 
 // Middleware: Login required.
@@ -124,6 +147,8 @@ exports.adminAndNotMyselfRequired = function(req, res, next){
  */
 const authenticate = (login, password) => {
 
+
+
     return models.user.findOne({where: {username: login}})
     .then(user => {
         if (user && user.verifyPassword(password)) {
@@ -162,6 +187,8 @@ exports.create = (req, res, next) => {
     authenticate(login, password)
     .then(user => {
         if (user) {
+            req.session.maxIdleTime=maxIdleTime; //para no tener que poner esto en varios sitios
+
             // Create req.session.user and save id and username fields.
             // The existence of req.session.user indicates that the session exists.
             // I also save the moment when the session will expire due to inactivity.

@@ -1,0 +1,34 @@
+<h1>
+    Random Play:
+</h1>
+
+<div>
+    Successful answers = <span id="score"><%= score %></span>
+</div>
+
+<form method="get" action="/quizzes/randomcheck/<%= quiz.id %>">
+
+    <p>
+        Question: <b><%= quiz.question %></b>
+    </p>
+
+
+    <div class="wideRow">
+        <input type="text" class="itemWide" id="answer" name="answer" value="" placeholder="Answer" autocomplete="off"/>
+        <input type="submit" class="itemNarrow" id="send" value="Check">
+    </div>
+</form>
+
+<h4 id="countdown"><%=locals.allowedTime%></h4>
+
+
+<% var tips = quiz.tips; %>
+<% var quizId = quiz.id; %>
+<% var quizAuthorId = quiz.authorId; %>
+
+
+<% include ../tips/index %>
+
+<script src="/js/timer_countdown.js"></script>
+
+
